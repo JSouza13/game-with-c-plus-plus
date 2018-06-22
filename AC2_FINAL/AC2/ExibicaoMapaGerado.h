@@ -6,51 +6,51 @@
 
 using namespace std;
 
-#define PAREDE 0
-#define VAZIA 1
-#define MONSTRO 2
-#define ESCUDO 3
-#define ESPADA 4
-#define MONSTRO_CHAVE 5
-#define PORTA_TRANCADA 6
-#define PERSONAGEM 7
-
 //Propriedades do mapa do jogo
+enum Cenario
+{
+	PAREDE, VAZIA, MONSTRO, ESCUDO, ESPADA, MONSTRO_CHAVE, PORTA_TRANCADA, INICIO, SAIDA
+};
+enum POSICAO
+{
+	ONDE_ESTOU, ONDE_IR, NADA
+};
 struct Mapa {
 	const static int tamanho = 14;
-	int matriz[tamanho][tamanho] = {
-		{ 0,1,2,3,4,5,6,7,8,9,10,11,12, 13 },
+	int matriz[tamanho][tamanho] = 
+	{
+		{ NADA,		   ONDE_IR,   ONDE_IR,   ONDE_IR,   ONDE_IR,   ONDE_IR,   ONDE_IR,   ONDE_IR,			ONDE_IR,    ONDE_IR,    ONDE_IR,	ONDE_IR,	ONDE_IR,	ONDE_IR },
+		{ ONDE_ESTOU,  PAREDE,    ESCUDO,	 MONSTRO,	PAREDE,	   PAREDE,	  PAREDE,	 PAREDE,			PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE },
+		{ ONDE_ESTOU,  PAREDE,    PAREDE,	 PAREDE,	ESPADA,	   MONSTRO,	  PAREDE,	 PAREDE,			PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE },
+		{ ONDE_ESTOU,  PAREDE,    PAREDE,	 PAREDE,	PAREDE,    MONSTRO,	  VAZIA,	 PAREDE,			PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE },
+		{ ONDE_ESTOU,  PAREDE,    PAREDE,	 PAREDE,	PAREDE,	   MONSTRO,	  VAZIA,	 PAREDE,			PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE },
+		{ ONDE_ESTOU,  PAREDE,    PAREDE,	 PAREDE,	PAREDE,	   PAREDE,	  VAZIA,	 MONSTRO_CHAVE,		PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE },
+		{ ONDE_ESTOU,  PAREDE,	  PAREDE,	 PAREDE,	PAREDE,	   PAREDE,	  PAREDE,	 MONSTRO_CHAVE,		VAZIA,		PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE },
+		{ ONDE_ESTOU,  PAREDE,	  PAREDE,	 PAREDE,	PAREDE,	   PAREDE,	  PAREDE,	 PAREDE,			PAREDE,		VAZIA,		VAZIA,		PAREDE,		PAREDE,		PAREDE },
+		{ ONDE_ESTOU,  PAREDE,	  PAREDE,	 PAREDE,	PAREDE,	   PAREDE,	  PAREDE,	 PAREDE,			PAREDE,		PAREDE,		VAZIA,		MONSTRO,	PAREDE,		PAREDE },
+		{ ONDE_ESTOU,  PAREDE,	  PAREDE,	 PAREDE,	PAREDE,	   PAREDE,	  PAREDE,	 PAREDE,			PAREDE,		PAREDE,		VAZIA,		MONSTRO,	PAREDE,		PAREDE },
+		{ ONDE_ESTOU,  PAREDE,	  PAREDE,	 PAREDE,	PAREDE,	   PAREDE,	  PAREDE,	 PAREDE,			PAREDE,		PAREDE,		PAREDE,		MONSTRO,	VAZIA,		PAREDE },
+		{ ONDE_ESTOU,  PAREDE,	  PAREDE,	 PAREDE,	PAREDE,	   PAREDE,	  PAREDE,	 PAREDE,			PAREDE,		PAREDE,		PAREDE,		PAREDE,		VAZIA,		PORTA_TRANCADA },
+		{ ONDE_ESTOU,  PAREDE,	  PAREDE,	 PAREDE,	ESPADA,	   PAREDE,	  PAREDE,	 PAREDE,			PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE,		PORTA_TRANCADA },
+		{ ONDE_ESTOU,  PAREDE,	  PAREDE,	 PAREDE,	PAREDE,	   PAREDE,	  PAREDE,	 PAREDE,			PAREDE,		PAREDE,		PAREDE,		PAREDE,		PAREDE,		SAIDA }
+	};;
+};
 
-	{ 1,0,3,2,0,0,0,0,0,0,0,0,0,0 },
-
-	{ 2,0,0,0,4,2,0,0,0,0,0,0,0,0 },
-
-	{ 3,0,0,0,0,2,1,0,0,0,0,0,0,0 },
-
-	{ 4,0,0,0,0,2,1,0,0,0,0,0,0,0 },
-
-	{ 5,0,0,0,0,0,1,5,0,0,0,0,0,0 },
-
-	{ 6,0,0,0,0,0,0,5,1,0,0,0,0,0 },
-
-	{ 7,0,0,0,0,0,0,0,0,1,1,0,0,0 },
-
-	{ 8,0,0,0,0,0,0,0,0,0,1,2,0,0 },
-
-	{ 9,0,0,0,0,0,0,0,0,0,1,2,0,0 },
-
-	{ 10,0,0,0,0,0,0,0,0,0,0,2,1,0 },
-
-	{ 11,0,0,0,0,0,0,0,0,0,0,0,1,6 },
-
-	{ 12,0,0,0,4,0,0,0,0,0,0,0,0,6 },
-
-	{ 13,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+struct SubMapa
+{
+	const static int tamanho = 5;
+	int matriz[tamanho][tamanho] = 
+	{	
+		{ INICIO,	 VAZIA,    VAZIA,    VAZIA,    VAZIA },
+		{ VAZIA,     VAZIA,    VAZIA,    VAZIA,    VAZIA },
+		{ VAZIA,     VAZIA,    MONSTRO,  VAZIA,    VAZIA },
+		{ VAZIA,     VAZIA,    VAZIA,    VAZIA,    VAZIA },
+		{ VAZIA,     VAZIA,    VAZIA,    VAZIA,    SAIDA }
 	};;
 };
 
 //Função que exibirá o mapa do jogo
-void exibirMapa(Mapa meuMapa)
+void exibirMeuMapa(Mapa meuMapa)
 {
 	for (int i = 0; i < 14; i++)
 	{
@@ -61,5 +61,15 @@ void exibirMapa(Mapa meuMapa)
 		cout << "\t" << endl;
 	}	
 }
-
+void exibirNovoMapa(SubMapa novoMapa)
+{
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			cout << novoMapa.matriz[i][j] << "\t";
+		}
+		cout << "\t" << endl;
+	}
+}
 #endif 

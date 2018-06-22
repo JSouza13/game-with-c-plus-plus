@@ -1,1 +1,6 @@
-﻿  AC2.vcxproj -> C:\Users\jooao\Documents\Faculdade\2018_1\Algoritmo\AC2_FINAL\Debug\AC2.exe
+﻿  AC2.cpp
+c:\users\jooao\documents\github\game-with-c-plus-plus\ac2_final\ac2\controlepersonagem.h(201): warning C4244: 'inicializando': conversão de 'double' para 'int', possível perda de dados
+c:\users\jooao\documents\github\game-with-c-plus-plus\ac2_final\ac2\controlepersonagem.h(202): warning C4244: '=': conversão de 'double' para 'int', possível perda de dados
+c:\users\jooao\documents\github\game-with-c-plus-plus\ac2_final\ac2\geracaomapa.h(26): warning C4244: 'argumento': conversão de 'time_t' para 'unsigned int', possível perda de dados
+c:\users\jooao\documents\github\game-with-c-plus-plus\ac2_final\ac2\ac2.cpp(11): warning C4244: 'argumento': conversão de 'time_t' para 'unsigned int', possível perda de dados
+  AC2.vcxproj -> C:\Users\jooao\Documents\GitHub\game-with-c-plus-plus\AC2_FINAL\Debug\AC2.exe
