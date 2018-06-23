@@ -9,7 +9,7 @@ using namespace std;
 //Propriedades do mapa do jogo
 enum Cenario
 {
-	PAREDE, VAZIA, MONSTRO, ESCUDO, ESPADA, MONSTRO_CHAVE, PORTA_TRANCADA, INICIO, SAIDA
+	PAREDE, VAZIA, MONSTRO, ESCUDO, ESPADA, MONSTRO_CHAVE, PORTA_TRANCADA, ENTRADA, SAIDA
 };
 enum POSICAO
 {
@@ -41,7 +41,7 @@ struct SubMapa
 	const static int tamanho = 5;
 	int matriz[tamanho][tamanho] = 
 	{	
-		{ INICIO,	 VAZIA,    VAZIA,    VAZIA,    VAZIA },
+		{ ENTRADA,	 VAZIA,    VAZIA,    VAZIA,    VAZIA },
 		{ VAZIA,     VAZIA,    VAZIA,    VAZIA,    VAZIA },
 		{ VAZIA,     VAZIA,    MONSTRO,  VAZIA,    VAZIA },
 		{ VAZIA,     VAZIA,    VAZIA,    VAZIA,    VAZIA },
