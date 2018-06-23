@@ -31,7 +31,7 @@ void inicializarJogo()
 		cout << endl;
 		do
 		{
-			escolherDestinoNovoMapa(variaveis.jogadorN1, variaveis.novoMapa);
+			escolherDestinoNovoMapa(variaveis.jogadorN1, variaveis.novoMapa, variaveis.chefao);
 		} while (variaveis.jogadorN1.ondeEstou != SAIDA && variaveis.jogadorN1.sobreviver != false);		
 
 		if (variaveis.jogadorN1.ondeEstou == SAIDA)
@@ -39,16 +39,7 @@ void inicializarJogo()
 			cout << "PARABÉNS!!! VOCÊ É UM GRANDE JOGADOR, ECONTROU A ULTIMA SALA DO LABIRINTO E ENCONTROU A VITÓRIA." << endl << endl;
 			cout << "VOCÊ ADQUIRIU " << variaveis.jogadorN1.exp << " EXPERIÊNCIA." << endl;
 			cout << "VOCÊ DERROTOU " << variaveis.jogadorN1.monstrosDerrotados << " MONSTRO(S)." << endl;
-			cout << "VOCÊ FUGIU " << variaveis.jogadorN1.fulga << " VEZ(ES) DE UMA BATALHA." << endl;
-			cout << "VOCÊ ADQUIRIU " << variaveis.jogadorN1.inventarioJogador.escudo << " ESCUDO" << endl;
-			cout << "VOCÊ ADQUIRIU " << variaveis.jogadorN1.inventarioJogador.espada << " ESPADA" << endl << endl;
-		}
-		if (variaveis.jogadorN1.sobreviver == false)
-		{
-			cout << endl << "QUE DROGA!!! INFELIZMENTE VOCÊ NAO FOI CAPAZ DE ALCANÇAR A VITÓRIA. NA SUA PROXIMA JORNADA, TENTE SE EQUIPAR MELHOR" << endl << endl;
-			cout << "VOCÊ ADQUIRIU " << variaveis.jogadorN1.exp << " DE EXPERIÊNCIA." << endl;
-			cout << "VOCÊ DERROTOU " << variaveis.jogadorN1.monstrosDerrotados << " MONSTRO(S)." << endl;
-			cout << "VOCÊ FUGIU " << variaveis.jogadorN1.fulga << " VEZ(ES) DE UMA BATALHA." << endl;
+			cout << "VOCÊ FUGIU " << variaveis.jogadorN1.fuga << " VEZ(ES) DE UMA BATALHA." << endl;
 			cout << "VOCÊ ADQUIRIU " << variaveis.jogadorN1.inventarioJogador.escudo << " ESCUDO" << endl;
 			cout << "VOCÊ ADQUIRIU " << variaveis.jogadorN1.inventarioJogador.espada << " ESPADA" << endl << endl;
 		}
@@ -58,7 +49,7 @@ void inicializarJogo()
 		cout << endl << "QUE DROGA!!! INFELIZMENTE VOCÊ NAO FOI CAPAZ DE ALCANÇAR A VITÓRIA. NA SUA PROXIMA JORNADA, TENTE SE EQUIPAR MELHOR" << endl << endl;
 		cout << "VOCÊ ADQUIRIU " << variaveis.jogadorN1.exp << " DE EXPERIÊNCIA." << endl;
 		cout << "VOCÊ DERROTOU " << variaveis.jogadorN1.monstrosDerrotados << " MONSTRO(S)." << endl;
-		cout << "VOCÊ FUGIU " << variaveis.jogadorN1.fulga << " VEZ(ES) DE UMA BATALHA." << endl;
+		cout << "VOCÊ FUGIU " << variaveis.jogadorN1.fuga << " VEZ(ES) DE UMA BATALHA." << endl;
 		cout << "VOCÊ ADQUIRIU " << variaveis.jogadorN1.inventarioJogador.escudo << " ESCUDO" <<endl;
 		cout << "VOCÊ ADQUIRIU " << variaveis.jogadorN1.inventarioJogador.espada << " ESPADA" << endl << endl;
 	}

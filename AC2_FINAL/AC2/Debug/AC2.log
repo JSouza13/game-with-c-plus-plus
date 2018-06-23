@@ -1,6 +1,7 @@
 ﻿  AC2.cpp
-c:\users\jooao\documents\github\game-with-c-plus-plus\ac2_final\ac2\controlepersonagem.h(210): warning C4244: 'inicializando': conversão de 'double' para 'int', possível perda de dados
-c:\users\jooao\documents\github\game-with-c-plus-plus\ac2_final\ac2\controlepersonagem.h(211): warning C4244: '=': conversão de 'double' para 'int', possível perda de dados
+c:\users\jooao\documents\github\game-with-c-plus-plus\ac2_final\ac2\controlepersonagem.h(227): warning C4244: 'inicializando': conversão de 'double' para 'int', possível perda de dados
+c:\users\jooao\documents\github\game-with-c-plus-plus\ac2_final\ac2\controlepersonagem.h(228): warning C4244: '=': conversão de 'double' para 'int', possível perda de dados
+c:\users\jooao\documents\github\game-with-c-plus-plus\ac2_final\ac2\controlepersonagem.h(511): warning C4244: 'argumento': conversão de 'time_t' para 'unsigned int', possível perda de dados
 c:\users\jooao\documents\github\game-with-c-plus-plus\ac2_final\ac2\geracaomapa.h(24): warning C4244: 'argumento': conversão de 'time_t' para 'unsigned int', possível perda de dados
 c:\users\jooao\documents\github\game-with-c-plus-plus\ac2_final\ac2\ac2.cpp(11): warning C4244: 'argumento': conversão de 'time_t' para 'unsigned int', possível perda de dados
   AC2.vcxproj -> C:\Users\jooao\Documents\GitHub\game-with-c-plus-plus\AC2_FINAL\Debug\AC2.exe
