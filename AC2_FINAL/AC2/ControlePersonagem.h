@@ -27,6 +27,7 @@ enum MovimentosCombateBoss
 	BOSSATACAR, BOSSDEFENDER, BOSSMAGIA
 };
 //Dados do jogador
+
 struct Jogador
 {
 	string nome;
@@ -39,18 +40,20 @@ struct Jogador
 	int direcao;
 	int kill = 0;
 	bool sobreviver = true;
-	int def;
-	int atack;
+	int def = 15; // A ideia futuramente é por essa defesa e ataque como uma propriedade dos itens Espada e Escudo
+	int atack = 25;
 	int ondeEstou = ENTRADA;
 	int linha = 0;
 	int coluna = 0;
 	bool fugiu = false;
 	int atackEspecial = 0;
 };
+
+//Dados do boss
 struct Boss
 {
 	int life = 100;
-	int atack = 25;
+	int atack = 15;
 	int def = 10;
 	bool vivo = true;
 	int movimentoBoss;
@@ -431,6 +434,7 @@ void localizacaoMapa(Mapa meuMapa, Jogador &heroi)
 		escolherDestino(heroi, esq, dir);
 }
 
+//Função que verifica se onde quero ir está dentro ou fora do mapa
 bool verificaForaMapa(Jogador &heroi, SubMapa newMaps)
 {
 	if  (heroi.linha < 0 or heroi.linha >= newMaps.tamanho or heroi.coluna < 0 or heroi.coluna >= newMaps.tamanho)
@@ -440,6 +444,8 @@ bool verificaForaMapa(Jogador &heroi, SubMapa newMaps)
 	}
 	return true;
 }
+
+//Função que verifica se onde quero ir, é uma parede
 bool verificaParede(Jogador &heroi, SubMapa newMaps)
 {
 	if (newMaps.matriz[heroi.linha][heroi.coluna] == PAREDE)
@@ -449,9 +455,12 @@ bool verificaParede(Jogador &heroi, SubMapa newMaps)
 	}
 	return true;
 }
+
+//Função para o heroi Atacar
 bool heroiAtacar(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 {
 	cout << "VAMOS AO ATAQUE!!" << endl;
+	//Dano = Atack do heroi - defesa do Boss
 	int dano = heroi.atack - chefao.def;
 	chefao.life = chefao.life - dano;
 	cout << "VOCÊ DESFERIU " << dano << " DE DANO E DEIXOU ELE COM " << chefao.life << " DE VIDA." << endl << endl;
@@ -466,23 +475,28 @@ bool heroiAtacar(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 	return true;
 }
 
+//Função para o heroi Defender
 bool heroiDefender(Jogador &heroi, SubMapa newMaps, Boss &chefao)
 {
 	cout << "VAMOS NOS PROTEGER!! " << endl;
+	//Dano = Atack do Boss - defesa do Heroi
 	int dano = chefao.atack - heroi.def;
 	heroi.life = heroi.life - dano;
 	cout << "VOCÊ SOFREU " << dano << " DE DANO E FICOU COM " << heroi.life << " DE VIDA." << endl << endl;
-	if (heroi.life <= 0)
+	if (heroi.life < 1)
 	{
 		heroi.sobreviver = false;
 	}
 	return true;
 }
 
+//Função para o heroi usar sua Ultimate
 bool heroiMagia(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 {
 	cout << "AQUI MALDITO, CONHEÇA MEU PODER!!!" << endl;
-	int magia = heroi.atack + heroi.def + 15;
+	//Magia = Atack do Heroi + defesa do Heroi + um valor aleatório
+	int magia = heroi.atack + heroi.def + 25;
+	//Dano = Magia - defesa do Boss
 	int dano = magia - chefao.def;
 	chefao.life = chefao.life - dano;
 	cout << "VOCÊ DESFERIU " << dano << " DE DANO E DEIXOU ELE COM " << chefao.life << " DE VIDA." << endl << endl;
@@ -497,29 +511,33 @@ bool heroiMagia(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 	return true;
 }
 
+//Função para o heroi tentar fugir
 bool heroiFugir(Jogador &heroi, SubMapa newMaps, Boss &chefao)
 {
 	cout << "VAMOS TENTAR FUGIR DESSE MONSTRO!! " << endl;
+	//utiliza a mesma fnção de sobrevivencia utilizada no primeiro labirinto
 	chanceSobreviver(heroi);
 	heroi.fugiu = true;
 	heroi.fuga = heroi.fuga + 1;
 	return true;
 }
 
+//Função que decidirao os movimentos do Boss aleatoriamente
 bool movimentoBoss(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 {
 	srand(time(NULL));
-	int movimentoBoss = rand() % 2;
+	int movimentoBoss = rand() % 3;
 	if (chefao.life > 0)
 	{
 		if (movimentoBoss == BOSSATACAR)
 		{
 			cout << "O BOSS LHE REVIDOU!! TOME ESSE DANO." << endl;
-			int dano = chefao.atack - heroi.def;
+			//Dano = Ataque do Boss - Defesa do Heroi + valor aleatorio 
+			int dano = chefao.atack - heroi.def + 10;;
 			heroi.life = heroi.life - dano;
 			cout << "VOCÊ SOFREU " << dano << " DE DANO E FICOU COM " << heroi.life << " DE VIDA." << endl << endl;
 			chefao.movimentoBoss = BOSSATACAR;
-			if (heroi.life <= 0)
+			if (heroi.life < 1)
 			{
 				heroi.sobreviver = false;
 			}
@@ -527,7 +545,8 @@ bool movimentoBoss(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 		if (movimentoBoss == BOSSDEFENDER)
 		{
 			cout << "O BOSS SE DEFENDEU!!" << endl;
-			int dano = heroi.atack - chefao.def;
+			//Dano = Ataque do Heroi - Defesa do Chefao + numero aleatorio
+			int dano = heroi.atack - chefao.def - 15;
 			chefao.life = chefao.life - dano;
 			cout << "ELE SOFREU " << dano << " DE DANO E FICOU COM " << chefao.life << " DE VIDA." << endl << endl;
 			chefao.movimentoBoss = BOSSDEFENDER;
@@ -543,12 +562,14 @@ bool movimentoBoss(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 		if (movimentoBoss == BOSSMAGIA)
 		{
 			cout << "O BOSS LHE REVIDOU!! CARACA!!! ELE USOU UMA GRANDE MAGIA." << endl;
-			int magia = chefao.atack + chefao.def;
+			//Magia = Ataque + Defesa do Boss
+			int magia = chefao.atack + chefao.def + 15;
+			//Dano = Magia - Defesa do Heroi
 			int dano = magia - heroi.def;
 			heroi.life = heroi.life - dano;
 			cout << "VOCÊ SOFREU " << dano << " DE DANO E FICOU COM " << heroi.life << " DE VIDA." << endl << endl;
 			chefao.movimentoBoss = BOSSMAGIA;
-			if (heroi.life <= 0)
+			if (heroi.life < 1)
 			{
 				heroi.sobreviver = false;
 			}
@@ -558,6 +579,7 @@ bool movimentoBoss(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 	return true;
 }
 
+//Função para decidir as ações do Heroi contra o Boss
 void movimentoJogador(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 {
 	if (chefao.vivo == true)
@@ -580,14 +602,15 @@ void movimentoJogador(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 			}
 			if (opcaoMonstro == MAGIA)
 			{
-				if (heroi.atackEspecial < 3)
+				if (heroi.atackEspecial < 2)
 				{
 					cout << "VOCÊ AINDA NAO TEM PODER SUFICIENTE!! ATAQUE MAIS." << endl << endl;
 				}
 				else
 				{
 					heroiMagia(heroi, newMaps, chefao);
-					movimentoBoss(heroi, newMaps, chefao);
+					heroi.atackEspecial = 0;
+					movimentoBoss(heroi, newMaps, chefao);					
 				}
 			}
 			if (opcaoMonstro == FUGIR)
@@ -602,6 +625,7 @@ void movimentoJogador(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 	}
 }
 
+//Função para verificar a saída do novo mapa do jogo
 void verificaSaida(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 {
 	if (heroi.ondeEstou != SAIDA && heroi.ondeEstou == MONSTRO && chefao.vivo == true)
@@ -619,13 +643,13 @@ void verificaSaida(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 	}
 }
 
-
+//Função para questionar destino no mapa
 void escolherDestinoNovoMapa(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 {
 	int ondeIr;
 	do {
-		cout << "Digite o numero para onde deseja ir..." << endl << endl;
-		cout << "Onde: CIMA = 0; BAIXO = 1; DIREITA = 2; ESQUERDA = 3" << endl;
+		cout << "DIGITE O NUMERO PARA ONDE DESEJA IR..." << endl << endl;
+		cout << "ONDE: CIMA = 0; BAIXO = 1; DIREITA = 2; ESQUERDA = 3" << endl;
 		cout << "DIAGONAL SUP. DIR. = 4; DIAGONAL SUP. ESQ. = 5; DIAGONAL INF. DIR. = 6; DIAGONAL INF. ESQ. = 7;" << endl << endl;
 		cin >> ondeIr;
 	} while (ondeIr != BAIXO && ondeIr != CIMA && ondeIr != DIREITA && ondeIr != ESQUERDA && ondeIr != DIAG_SUP_DIR && ondeIr != DIAG_SUP_ESQ && ondeIr != DIAG_INF_DIR && ondeIr != DIAG_INF_ESQ);
@@ -634,7 +658,7 @@ void escolherDestinoNovoMapa(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 		heroi.linha = heroi.linha + 1;
 		if (verificaForaMapa(heroi, newMaps) == true && verificaParede(heroi, newMaps) == true)
 		{
-			cout << "Estou em: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
+			cout << "ESTOU EM: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
 			if (heroi.sobreviver == true)
 			{
 				heroi.ondeEstou = newMaps.matriz[heroi.linha][heroi.coluna];
@@ -651,7 +675,7 @@ void escolherDestinoNovoMapa(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 		heroi.linha = heroi.linha - 1;
 		if (verificaForaMapa(heroi, newMaps) == true && verificaParede(heroi, newMaps) == true)
 		{
-			cout << "Estou em: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
+			cout << "ESTOU EM: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
 			if (heroi.sobreviver == true)
 			{
 				heroi.ondeEstou = newMaps.matriz[heroi.linha][heroi.coluna];
@@ -668,7 +692,7 @@ void escolherDestinoNovoMapa(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 		heroi.coluna = heroi.coluna + 1;
 		if (verificaForaMapa(heroi, newMaps) == true && verificaParede(heroi, newMaps) == true)
 		{			
-			cout << "Estou em: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
+			cout << "ESTOU EM: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
 			if (heroi.sobreviver == true)
 			{
 				heroi.ondeEstou = newMaps.matriz[heroi.linha][heroi.coluna];
@@ -685,7 +709,7 @@ void escolherDestinoNovoMapa(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 		heroi.coluna = heroi.coluna - 1;
 		if (verificaForaMapa(heroi, newMaps) == true && verificaParede(heroi, newMaps) == true)
 		{			
-			cout << "Estou em: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
+			cout << "ESTOU EM: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
 			if (heroi.sobreviver == true)
 			{
 				heroi.ondeEstou = newMaps.matriz[heroi.linha][heroi.coluna];
@@ -703,7 +727,7 @@ void escolherDestinoNovoMapa(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 		heroi.linha = heroi.linha + 1;
 		if (verificaForaMapa(heroi, newMaps) == true && verificaParede(heroi, newMaps) == true)
 		{
-			cout << "Estou em: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
+			cout << "ESTOU EM: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
 			if (heroi.sobreviver == true)
 			{
 				heroi.ondeEstou = newMaps.matriz[heroi.linha][heroi.coluna];
@@ -722,7 +746,7 @@ void escolherDestinoNovoMapa(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 		heroi.linha = heroi.linha + 1;
 		if (verificaForaMapa(heroi, newMaps) == true && verificaParede(heroi, newMaps) == true)
 		{
-			cout << "Estou em: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
+			cout << "ESTOU EM: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
 			if (heroi.sobreviver == true)
 			{
 				heroi.ondeEstou = newMaps.matriz[heroi.linha][heroi.coluna];
@@ -741,7 +765,7 @@ void escolherDestinoNovoMapa(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 		heroi.linha = heroi.linha - 1;
 		if (verificaForaMapa(heroi, newMaps) == true && verificaParede(heroi, newMaps) == true)
 		{
-			cout << "Estou em: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
+			cout << "ESTOU EM: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
 			if (heroi.sobreviver == true)
 			{
 				heroi.ondeEstou = newMaps.matriz[heroi.linha][heroi.coluna];
@@ -760,7 +784,7 @@ void escolherDestinoNovoMapa(Jogador &heroi, SubMapa &newMaps, Boss &chefao)
 		heroi.linha = heroi.linha - 1;
 		if (verificaForaMapa(heroi, newMaps) == true && verificaParede(heroi, newMaps) == true)
 		{
-			cout << "Estou em: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
+			cout << "ESTOU EM: [" << heroi.linha << "]" << "[" << heroi.coluna << "]" << endl << endl;
 			if (heroi.sobreviver == true)
 			{
 				heroi.ondeEstou = newMaps.matriz[heroi.linha][heroi.coluna];
